@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: rgb(43, 43, 43);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .container > div {
+            margin: 20px 0;
+
+        }
+        .flex {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flex-inline {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .rotate {
+            position: relative;
+            height: 500px;
+        }
+        .rotate .block {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            width: 100px;
+            height: 200px;
+            border: 1px solid black;
+            transition: transform 0.5s;
+            background: pink;
+            overflow: hidden;
+            background: no-repeat;
+            background-size: cover;
+            background-position: 50%;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div>
+        <button id="change">change</button>
+    </div>
+    <div id="rotate" class="rotate">
+    </div>
+</div>
+
+<script>
+    (function () {
+        var CONST = {
+            // ¿ØÖÆÍ¼Æ¬²¥·ÅÊý
+            LENGTH: 8, 
+            IMG: [
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523621264121&di=a5e4601fe704732a8024232cdfabe761&imgtype=0&src=http%3A%2F%2Fwww.people.com.cn%2Fmediafile%2Fpic%2F20140702%2F15%2F6675458802852435939.jpg',
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523621310317&di=b84189753bcff9afecdafe8390ba6be6&imgtype=0&src=http%3A%2F%2Fpic31.nipic.com%2F20130727%2F7447430_083056541000_2.jpg',
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523621310316&di=e4d1a8afc7a4b354d17be2f33f760bf2&imgtype=0&src=http%3A%2F%2Fpic21.nipic.com%2F20120525%2F8944700_082359658000_2.jpg',
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523621310315&di=85c6c9c73e0bd4c69aaadec63f480f34&imgtype=0&src=http%3A%2F%2Fpic30.nipic.com%2F20130605%2F7447430_151455853000_2.jpg',
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523621368939&di=11c3fa7d30887c2624732bb7b9dfa966&imgtype=0&src=http%3A%2F%2Fimg.lenovomm.com%2Fs3%2Fimg%2Fapp%2Fapp-img-lestore%2F4543-2015-07-07023030-1436250630970.jpg%3FisCompress%3Dtrue%26width%3D320%26height%3D480%26quantity%3D1%26rotate%3Dtrue',
+                'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=925218139,1799864686&fm=27&gp=0.jpg',
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524216203&di=7970b24e5b392d39b5642e6fdb69411d&imgtype=jpg&er=1&src=http%3A%2F%2Fp1.qhmsg.com%2Ft0136a6e9083131574e.jpg',
+                'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2615904095,237447299&fm=27&gp=0.jpg'
+            ]
+        }
+
+        var selected = 0;
+        var fold = 0;
+
+        var rotate = document.querySelector('#rotate');
+        for (var i = 0; i < CONST.LENGTH; i++) {
+            var dom = document.createElement('div');
+            dom.className = 'block flex-inline'
+            // dom.innerHTML = '' + i;
+            dom.onclick = (function (i) {
+                return function () {
+                    selected = i;
+                    var blocks = document.querySelectorAll('.block');
+                    blocks.forEach(render)
+                }
+            })(i)
+            render(dom, i)
+            rotate.appendChild(dom);
+        }
+
+        var btn = document.querySelector('#change');
+        btn.onclick = function () {
+            console.log('change')
+            fold = fold ? 0 : 1;
+            var blocks = document.querySelectorAll('.block');
+            blocks.forEach(render)
+        }
+
+        function render(dom, i) {
+            var deg = (360 / CONST.LENGTH * i + (360 / CONST.LENGTH * (CONST.LENGTH / 2 - selected))) * fold;
+            var abs = Math.round(Math.abs(i - selected))
+            if (abs === CONST.LENGTH - 1)
+                abs = 1
+            var zIndex = 1000 - abs
+            dom.setAttribute('style', 'z-index: ' + zIndex +
+                '; transform: perspective(300px) rotate3d(0, 1, 0, ' + deg +
+                'deg) translate3d(0, 0, -150px) scale(-1, 1); background-image: url(' + CONST.IMG[i] + ');');
+        }
+    })();
+</script>
+</body>
+</html>
